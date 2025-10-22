@@ -15,22 +15,40 @@ import java.net.URL;
 public class ProxyController {
     int serverNumber = 0;
     String[] servers = new String[]{
-            "",""
+            "http://ec2-98-88-119-196.compute-1.amazonaws.com:8080/",
+            "http://ec2-54-81-9-20.compute-1.amazonaws.com:8080/"
     };
 
     private static final String USER_AGENT = "Mozilla/5.0";
     @GetMapping("/binarySearch")
     public ResponseEntity<?> binarySearch(@RequestParam int value, @RequestParam String list){
-        serverNumber = (serverNumber + 1) % 2;
+        try{
+            return ResponseEntity.ok(manageServer(value,list));
+        }catch(Exception ex){
+            return ResponseEntity.status(500).body(ex.getMessage());
+        }
 
     }
 
     @GetMapping("/linearSearch")
     public ResponseEntity<?> linearSearch(@RequestParam int value, @RequestParam String list){
-
+        try{
+            return ResponseEntity.ok(manageServer(value,list));
+        }catch(Exception ex){
+            return ResponseEntity.status(500).body(ex.getMessage());
+        }
     }
 
-    public static StringBuffer getRequest(String url) throws IOException {
+    public String manageServer(int value, String list) throws Exception{
+        try{
+            String fullUrl = servers[serverNumber] + "binarySearch?value="+value+"&list="+list;
+            return getRequest(fullUrl);
+        }catch(IOException e){
+            serverNumber = (serverNumber + 1) % 2;
+            return manageServer(value, list);
+        }
+    }
+    public String getRequest(String url) throws IOException, Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
@@ -53,10 +71,10 @@ public class ProxyController {
 
             // print result
             System.out.println(response.toString());
+            return response.toString();
         } else {
-            System.out.println("GET request not worked");
+            throw new Exception("An error ocurred");
         }
-        System.out.println("GET DONE");
     }
 
 }

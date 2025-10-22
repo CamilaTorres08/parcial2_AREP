@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Binary Search</h1>
+<form action="/binarySearch">
+    <label for="value">Value:</label><br>
+    <input type="text" id="value" name="value"><br><br>
+    <label for="list">List:</label><br>
+    <input type="text" id="list" name="list"><br><br>
+    <input type="button" value="Submit" onclick="loadGetMsg()">
+</form>
+<div id="binaryResult"></div>
+<h1>Linear Search</h1>
+<form action="/linearSearch">
+    <label for="liVal">Value:</label><br>
+    <input type="text" id="liVal" name="liVal"><br><br>
+    <label for="liList">List:</label><br>
+    <input type="text" id="liList" name="liList"><br><br>
+    <input type="button" value="Submit" onclick="loadGetMsgLinear()">
+</form>
+<div id="linearResult"></div>
+<script>
+    function loadGetMsg() {
+    let value = document.getElementById("value").value;
+    let list = document.getElementById("list").value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+    document.getElementById("binaryResult").innerHTML =
+    this.responseText;
+    }
+    xhttp.open("GET", "/binarySearch?value="+value+"&list="+list);
+    xhttp.send();
+    }
+    function loadGetMsgLinear() {
+    let value = document.getElementById("liVal").value;
+    let list = document.getElementById("liList").value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+    document.getElementById("linearResult").innerHTML =
+    this.responseText;
+    }
+    xhttp.open("GET", "/linearSearch?value="+value+"&list="+list);
+    xhttp.send();
+    }
+</script>
+</body>
+</html>
